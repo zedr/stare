@@ -1,8 +1,14 @@
-default: build execute
+cmd=./stare genea -v echo yes
 
-build:
+default: compile execute
+
+compile:
 	@gcc -Wall -o stare -s stare.c
 	@gcc -Wall -o genea -s genea.c
 
 execute:
-	@valgrind -v --leak-check=full ./stare genea -v echo yes
+	@$(cmd)
+
+valgrind_execute:
+	@valgrind $(cmd)
+	#@valgrind -v --leak-check=full $(cmd)

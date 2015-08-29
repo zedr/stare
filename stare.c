@@ -1,38 +1,48 @@
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "stare.h"
-
 
 void usage(void)
 {
 	puts("Usage: stare <what> <command [arg1] [arg2] .. [argN]>");
 }
 
+char *join_str(char *str1, char *str2)
+{
+	char *dest;
+	asprintf(&dest, "%s %s", str1, str2);
+	return dest;
+}
+
 struct config *get_config(int argc, char *argv[])
 {
-	struct config *conf = (struct config *) malloc(sizeof *conf);
-	char *substr = "";
 	int i = 1;
+	char *str = "";
+	struct config *conf = (struct config *) malloc(sizeof *conf);
 
-	conf->verbose = 0;
-	conf->what = "";
-	conf->command = "";
+	if (conf != NULL) {
+		conf->verbose = 0;
+		conf->what = "";
+		conf->cmd = "";
 
-	do {
-		substr = argv[i];
-
-		if (strcmp(substr, "-v") == 0) {
-			conf->verbose = 1;
-		} else {
-			if (strcmp(conf->what, "") == 0) {
-				conf->what = substr;
+		do {
+			str = argv[i];
+			if (strcmp(str, "-v") == 0) {
+				conf->verbose = 1;
 			} else {
-				conf->command = substr;
+				if (strcmp(conf->what, "") == 0) {
+					conf->what = str;
+				} else if (strcmp(conf->cmd, "") == 0) {
+					conf->cmd = str;
+				} else {
+					conf->cmd = join_str(conf->cmd, str);
+				}
 			}
-		}
-
-	} while(++i < argc);
+		} while(++i < argc);
+	}
 
 	return conf;
 }
@@ -43,14 +53,23 @@ int main(int argc, char *argv[])
 
 	if (argc > 2) {
 		conf = get_config(argc, argv);
+
+		if (conf == NULL) {
+			puts("Out of memory.");
+			return 1;
+		}
+
 		if (conf->verbose) {
 			puts("High verbosity.");
 			printf("Watching: %s\n", conf->what);
-			printf("Will execute: %s\n", conf->command);
+			printf("Will execute: %s\n", conf->cmd);
 		}
+
+		free(conf->cmd);
 		free(conf);
 	} else {
 		usage();
 	}
+
 	return 0;
 }
