@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sysexits.h>
+#include <unistd.h>
 #include "stare.h"
 
 void usage(void)
@@ -48,6 +49,18 @@ struct config *get_config(int argc, char *argv[])
 	return conf;
 }
 
+bool is_valid_config(struct config *conf)
+{
+	bool verbose = conf->verbose;
+
+	if (access(conf->what, F_OK) != -1)
+		return 1;
+	else if (verbose)
+		printf("File to watch wasn't found: %s\n", conf->what);
+
+	return 0;
+}
+
 void print_config(struct config *conf)
 {
 	if (conf->verbose)
@@ -61,6 +74,7 @@ void print_config(struct config *conf)
 int main(int argc, char *argv[])
 {
 	struct config *conf;
+	int exit_code = 1;
 
 	if (argc > 2) {
 		conf = get_config(argc, argv);
@@ -73,12 +87,16 @@ int main(int argc, char *argv[])
 		if (conf->verbose)
 			print_config(conf);
 
-		free(conf->cmd);
+		if (is_valid_config(conf)) {
+			puts("Valid.");
+			exit_code = 0;
+		}
+
 		free(conf);
 	} else {
 		usage();
-		return EX_USAGE;
+		exit_code = EX_USAGE;
 	}
 
-	return 0;
+	return exit_code;
 }
