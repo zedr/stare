@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sysexits.h>
 #include "stare.h"
 
 void usage(void)
@@ -47,6 +48,16 @@ struct config *get_config(int argc, char *argv[])
 	return conf;
 }
 
+void print_config(struct config *conf)
+{
+	if (conf->verbose)
+		puts("High verbosity.");
+	else
+		puts("Low verbosity.");
+	printf("Watching: %s\n", conf->what);
+	printf("Will execute: %s\n", conf->cmd);
+}
+
 int main(int argc, char *argv[])
 {
 	struct config *conf;
@@ -59,16 +70,14 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		if (conf->verbose) {
-			puts("High verbosity.");
-			printf("Watching: %s\n", conf->what);
-			printf("Will execute: %s\n", conf->cmd);
-		}
+		if (conf->verbose)
+			print_config(conf);
 
 		free(conf->cmd);
 		free(conf);
 	} else {
 		usage();
+		return EX_USAGE;
 	}
 
 	return 0;
