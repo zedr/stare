@@ -5,7 +5,11 @@
 #include <string.h>
 #include <sysexits.h>
 #include <unistd.h>
+#include <sys/inotify.h>
 #include "stare.h"
+
+#define EVENT_SIZE (sizeof (struct inotify_event))
+#define BUF_LEN	(1024 * (EVENT_SIZE + 16))
 
 void usage(void)
 {
@@ -71,6 +75,26 @@ void print_config(struct config *conf)
 	printf("Will execute: %s\n", conf->cmd);
 }
 
+void inotify_watch(char *what, char *command)
+{
+	int fd, wd, length;
+	char buffer[BUF_LEN];
+
+	fd = inotify_init();
+	if (fd < 0)
+		puts("Inotify init error.");
+	else {
+		wd = inotify_add_watch(fd, what, IN_MODIFY);
+		length = read(fd, buffer, BUF_LEN);
+		if (length < 0)
+			puts("Inotify read error.");
+		else
+			system(command);
+	}
+	inotify_rm_watch(fd, wd);
+	close(fd);
+}
+
 int main(int argc, char *argv[])
 {
 	struct config *conf;
@@ -89,10 +113,13 @@ int main(int argc, char *argv[])
 
 		if (is_valid_config(conf)) {
 			puts("Valid.");
+			while(1)
+				inotify_watch(conf->what, conf->cmd);
 			exit_code = 0;
 		}
 
 		free(conf);
+		conf = NULL;
 	} else {
 		usage();
 		exit_code = EX_USAGE;
