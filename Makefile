@@ -1,14 +1,16 @@
-cmd=./stare genea -v echo yes
+cmd=stare Makefile -v echo yes
 
-default: compile execute
+default: compile
 
 compile:
-	@gcc -Wall -o stare -s stare.c
-	@gcc -Wall -o genea -s genea.c
+	@mkdir -p build
+	@gcc -Wall -o build/stare -s src/stare.c
 
 execute:
 	@$(cmd)
 
+clean:
+	rm -rf build
+
 valgrind_execute:
-	@valgrind $(cmd)
-	#@valgrind -v --leak-check=full $(cmd)
+	@valgrind -v --leak-check=full build/$(cmd)

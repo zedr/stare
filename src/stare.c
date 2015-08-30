@@ -8,9 +8,6 @@
 #include <sys/inotify.h>
 #include "stare.h"
 
-#define EVENT_SIZE (sizeof (struct inotify_event))
-#define BUF_LEN	(1024 * (EVENT_SIZE + 16))
-
 void usage(void)
 {
 	puts("Usage: stare <what> <command [arg1] [arg2] .. [argN]>");
