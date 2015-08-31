@@ -10,7 +10,7 @@ execute:
 	@$(cmd)
 
 clean:
-	rm -rf build
+	@rm -rf build
 
 valgrind_execute:
 	@valgrind -v --leak-check=full build/$(cmd)
