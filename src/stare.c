@@ -86,7 +86,6 @@ void inotify_watch(char *what, char *command)
 		if (length < 0)
 			puts("Inotify read error.");
 		else {
-			puts(buffer);
 			system(command);
 		}
 	}
