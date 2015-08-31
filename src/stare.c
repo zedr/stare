@@ -10,7 +10,7 @@
 
 void usage(void)
 {
-	puts("Usage: stare <what> <command [arg1] [arg2] .. [argN]>");
+	puts("Usage: stare PATH_1 [PATH_2, ...PATH_N] [-c \"COMMAND\"]");
 }
 
 char *join_str(char *str1, char *str2)
