@@ -4,13 +4,13 @@ default: compile
 
 compile:
 	@mkdir -p build
-	gcc -Wall -o build/stare -s src/stare/stare.c
+	gcc -Wall -o build/stare -s src/stare/*.c
 
 execute:
 	@$(cmd)
 
 tests:
-	gcc -Wall -o build/tests -s src/tests/config.c
+	gcc -Wall -o build/tests -s src/tests/config_tests.c
 	@./build/tests
 
 clean:
