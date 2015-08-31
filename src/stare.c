@@ -85,8 +85,10 @@ void inotify_watch(char *what, char *command)
 		length = read(fd, buffer, BUF_LEN);
 		if (length < 0)
 			puts("Inotify read error.");
-		else
+		else {
+			puts(buffer);
 			system(command);
+		}
 	}
 	inotify_rm_watch(fd, wd);
 	close(fd);
@@ -109,7 +111,6 @@ int main(int argc, char *argv[])
 			print_config(conf);
 
 		if (is_valid_config(conf)) {
-			puts("Valid.");
 			while(1)
 				inotify_watch(conf->what, conf->cmd);
 			exit_code = 0;
