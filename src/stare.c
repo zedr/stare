@@ -76,12 +76,13 @@ void inotify_watch(char *what, char *command)
 {
 	int fd, wd, length;
 	char buffer[BUF_LEN];
+	int IN_FLAGS = IN_CREATE | IN_MODIFY | IN_DELETE;
 
 	fd = inotify_init();
 	if (fd < 0)
 		puts("Inotify init error.");
 	else {
-		wd = inotify_add_watch(fd, what, IN_MODIFY);
+		wd = inotify_add_watch(fd, what, IN_FLAGS);
 		length = read(fd, buffer, BUF_LEN);
 		if (length < 0)
 			puts("Inotify read error.");
