@@ -3,9 +3,9 @@
 #include <sysexits.h>
 #include <unistd.h>
 #include <sys/inotify.h>
+#include "constants.h"
 #include "types.h"
 #include "config.h"
-#include "stare.h"
 
 void usage(void)
 {
