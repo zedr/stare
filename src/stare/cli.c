@@ -9,7 +9,9 @@
 
 void usage(void)
 {
-	puts("Usage: stare PATH_1 [PATH_2, ...PATH_N] [-c \"COMMAND\"]");
+	puts("Stare - a simple inotify tool.");
+	puts("Usage:");
+	fputs("\tstare [-v] <file1> [fileN] [-c \"command1\"] [-c \"commandN\"]", stdout);
 }
 
 void inotify_watch(char *what, char *command)
