@@ -13,31 +13,39 @@ char *join_str(char *str1, char *str2)
 	return dest;
 }
 
+void set_defaults(struct config *conf)
+{
+	conf->verbose = 0;
+	conf->what = "";
+	conf->cmd = "";
+}
+
 struct config *get_config(int argc, char *argv[])
 {
-	int i = 1;
-	char *str = "";
+	int i;
+	char *opt = "";
 	struct config *conf = (struct config *) malloc(sizeof *conf);
+	bool is_command = 0;
 
-	if (conf != NULL) {
-		conf->verbose = 0;
-		conf->what = "";
-		conf->cmd = "";
+	if (argc > 0 && conf != NULL) {
+		set_defaults(conf);
 
-		do {
-			str = argv[i];
-			if (strcmp(str, "-v") == 0) {
+		for (i=1; i < argc; i++) {
+			opt = argv[i];
+
+			if (is_command) {
+				conf->cmd = opt;
+				is_command = 0;
+			} else if (strcmp("-v", opt) == 0) {
 				conf->verbose = 1;
+			} else if (strcmp("-c", opt) == 0) {
+				is_command = 1;
+				continue;
+			} else if (opt[0] == '-') {
 			} else {
-				if (strcmp(conf->what, "") == 0) {
-					conf->what = str;
-				} else if (strcmp(conf->cmd, "") == 0) {
-					conf->cmd = str;
-				} else {
-					conf->cmd = join_str(conf->cmd, str);
-				}
+				conf->what = opt;
 			}
-		} while(++i < argc);
+		}
 	}
 
 	return conf;

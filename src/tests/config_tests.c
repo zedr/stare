@@ -6,43 +6,49 @@
 
 int tests_run = 0;
 
-static char * test_can_parse_verbose_arg()
+MU_TEST(test_can_parse_verbose_arg)
 {
 	int argc = 3;
 	char *argv[] = {"stare", "-v"};
 	struct config *conf = get_config(argc, argv);
 	bool verbose = conf->verbose;
 
-	mu_assert("verbose is false, it should be true", verbose);
-	return 0;
+	mu_assert(verbose, "verbose is false, it should be true");
 }
 
-static char * test_config_from_arguments()
+MU_TEST(test_config_from_arguments)
 {
-	int argc = 3;
+	int argc = 2;
 	char *argv[] = {"stare", "world"};
 	struct config *conf = get_config(argc, argv);
 	char *what = conf->what;
 
-	mu_assert("what is not equal to 'world' ", strcmp(what, "world") == 0);
-	return 0;
+	mu_assert(strcmp(what, "world") == 0, "`what` is not equal to 'world'");
 }
 
-static char * all_tests()
+MU_TEST(test_config_using_command_option)
 {
-	mu_run_test(test_can_parse_verbose_arg);
-	mu_run_test(test_config_from_arguments);
-	return 0;
+	int argc = 4;
+	char *argv[] = {"stare", "-c", "foo", "world"};
+	struct config *conf = get_config(argc, argv);
+	char *cmd = conf->cmd;
+	char *what = conf->what;
+
+	mu_assert(strcmp(cmd, "foo") == 0, "`cmd` is not equal to 'foo'");
+	mu_assert(strcmp(what, "world") == 0, "`what` is not equal to 'world'");
+}
+
+MU_TEST_SUITE(all_tests)
+{
+	MU_RUN_TEST(test_can_parse_verbose_arg);
+	MU_RUN_TEST(test_config_from_arguments);
+	MU_RUN_TEST(test_config_using_command_option);
 }
 
 int main(int argc, const char *argv[])
 {
-	char *result = all_tests();
-	if (result ==0) {
-		puts("OK");
-	} else {
-		printf("KO: %s\n", result);
-	}
+	MU_RUN_TEST(all_tests);
+	MU_REPORT();
 
 	return 0;
 }
