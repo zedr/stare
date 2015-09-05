@@ -16,5 +16,8 @@ tests:
 clean:
 	@rm -rf build
 
+lint:
+	 @./tools/checkpatch.pl -f --no-tree src/**/*.c
+
 valgrind_execute:
 	@valgrind -v --leak-check=full build/$(cmd)

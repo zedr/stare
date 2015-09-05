@@ -9,6 +9,7 @@
 char *join_str(char *str1, char *str2)
 {
 	char *dest;
+
 	asprintf(&dest, "%s %s", str1, str2);
 	return dest;
 }
@@ -20,18 +21,18 @@ void set_defaults(struct config *conf)
 	conf->cmd = "";
 }
 
-struct config *get_config(int argc, char *argv[])
+struct config *get_config(int argc, const char *argv[])
 {
 	int i;
 	char *opt = "";
-	struct config *conf = (struct config *) malloc(sizeof *conf);
+	struct config *conf = (struct config *) malloc(sizeof(*conf));
 	bool is_command = 0;
 
 	if (argc > 0 && conf != NULL) {
 		set_defaults(conf);
 
-		for (i=1; i < argc; i++) {
-			opt = argv[i];
+		for (i = 1; i < argc; i++) {
+			opt = (char *) argv[i];
 
 			if (is_command) {
 				conf->cmd = opt;
@@ -42,6 +43,7 @@ struct config *get_config(int argc, char *argv[])
 				is_command = 1;
 				continue;
 			} else if (opt[0] == '-') {
+				;
 			} else {
 				conf->what = opt;
 			}

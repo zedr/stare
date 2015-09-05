@@ -9,9 +9,10 @@
 
 void usage(void)
 {
-	puts("Stare - a simple inotify tool.");
-	puts("Usage:");
-	fputs("\tstare [-v] <file1> [fileN] [-c \"command1\"] [-c \"commandN\"]", stdout);
+	fputs("Stare - a simple inotify tool.\n\n", stderr);
+	fputs("Usage:\n\tstare", stderr);
+	fputs(" [-v]", stderr);
+	fputs(" <file1> [fileN] [-c \"command1\"] [-c \"commandN\"]\n", stderr);
 }
 
 void inotify_watch(char *what, char *command)
@@ -28,15 +29,14 @@ void inotify_watch(char *what, char *command)
 		length = read(fd, buffer, BUF_LEN);
 		if (length < 0)
 			puts("Inotify read error.");
-		else {
+		else
 			system(command);
-		}
 	}
 	inotify_rm_watch(fd, wd);
 	close(fd);
 }
 
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
 	struct config *conf;
 	int exit_code = 1;
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 			print_config(conf);
 
 		if (is_valid_config(conf)) {
-			while(1)
+			while (1)
 				inotify_watch(conf->what, conf->cmd);
 			exit_code = 0;
 		}

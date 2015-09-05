@@ -5,12 +5,10 @@
 #include "../stare/types.h"
 #include "../stare/config.h"
 
-int tests_run = 0;
-
 MU_TEST(test_can_parse_verbose_arg)
 {
 	int argc = 3;
-	char *argv[] = {"stare", "-v"};
+	const char *argv[] = {"stare", "-v"};
 	struct config *conf = get_config(argc, argv);
 	bool verbose = conf->verbose;
 
@@ -22,7 +20,7 @@ MU_TEST(test_can_parse_verbose_arg)
 MU_TEST(test_config_from_1_argument)
 {
 	int argc = 2;
-	char *argv[] = {"stare", "world"};
+	const char *argv[] = {"stare", "world"};
 	struct config *conf = get_config(argc, argv);
 	char *what = conf->what;
 
@@ -34,7 +32,7 @@ MU_TEST(test_config_from_1_argument)
 MU_TEST(test_config_using_command_option)
 {
 	int argc = 4;
-	char *argv[] = {"stare", "-c", "foo", "world"};
+	const char *argv[] = {"stare", "-c", "foo", "world"};
 	struct config *conf = get_config(argc, argv);
 	char *cmd = conf->cmd;
 	char *what = conf->what;
