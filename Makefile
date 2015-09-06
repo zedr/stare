@@ -11,7 +11,7 @@ execute:
 
 tests:
 	gcc -g -Wall -o build/config_tests src/stare/config.c src/tests/config_tests.c
-	gcc -g -Wall -o build/str_tests src/stare/config.c src/tests/str_tests.c
+	gcc -g -Wall -o build/str_tests src/stare/str.c src/tests/str_tests.c
 	@./build/config_tests
 	@./build/str_tests
 
