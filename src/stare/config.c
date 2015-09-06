@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "types.h"
+#include "common.h"
+#include "config.h"
 
 char *join_str(char *str1, char *str2)
 {

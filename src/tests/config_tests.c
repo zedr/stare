@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "minunit.h"
-#include "../stare/types.h"
+#include "../stare/common.h"
 #include "../stare/config.h"
 
 MU_TEST(test_can_parse_verbose_arg)

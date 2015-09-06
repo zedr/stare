@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <sys/inotify.h>
 #include "constants.h"
-#include "types.h"
+#include "common.h"
 #include "config.h"
 
 void usage(void)

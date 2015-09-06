@@ -10,8 +10,10 @@ execute:
 	@$(cmd)
 
 tests:
-	gcc -g -Wall -o build/tests src/stare/config.c src/tests/config_tests.c
-	@./build/tests
+	gcc -g -Wall -o build/config_tests src/stare/config.c src/tests/config_tests.c
+	gcc -g -Wall -o build/str_tests src/stare/config.c src/tests/str_tests.c
+	@./build/config_tests
+	@./build/str_tests
 
 clean:
 	@rm -rf build
